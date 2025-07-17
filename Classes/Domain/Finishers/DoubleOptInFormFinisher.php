@@ -159,7 +159,7 @@ class DoubleOptInFormFinisher extends \TYPO3\CMS\Form\Domain\Finishers\EmailFini
 
     private function prepareMailToReceiver(FormRuntime $formRuntime): string
     {
-        $recipients = $this->getRecipients('recipients');
+        $recipients = $this->getRecipients('recipients', 'recipientAddress', 'recipientName');
         if (sizeof($recipients) === 0) {
             return '';
         }
@@ -258,11 +258,11 @@ class DoubleOptInFormFinisher extends \TYPO3\CMS\Form\Domain\Finishers\EmailFini
         $senderAddress = is_string($senderAddress) ? $senderAddress : '';
         $senderName = $this->parseOption('senderName');
         $senderName = is_string($senderName) ? $senderName : '';
-        $replyToRecipients = $this->getRecipients('replyToRecipients');
+        $replyToRecipients = $this->getRecipients('replyToRecipients', 'replyToAddress');
         $replyToRecipientsArray = AddressUtility::toArray($replyToRecipients);
-        $carbonCopyRecipients = $this->getRecipients('carbonCopyRecipients');
+        $carbonCopyRecipients = $this->getRecipients('carbonCopyRecipients', 'carbonCopyAddress');
         $carbonCopyRecipientsArray = AddressUtility::toArray($carbonCopyRecipients);
-        $blindCarbonCopyRecipients = $this->getRecipients('blindCarbonCopyRecipients');
+        $blindCarbonCopyRecipients = $this->getRecipients('blindCarbonCopyRecipients', 'blindCarbonCopyAddress');
         $blindCarbonCopyRecipientsArray = AddressUtility::toArray($blindCarbonCopyRecipients);
         return compact ('senderAddress', 'senderName', 'replyToRecipients', 'carbonCopyRecipients', 'blindCarbonCopyRecipients');
     }
