@@ -20,6 +20,12 @@ class MailToReceiverService
     public function sendPreparedMail(array $mailData): void
     {
         extract($mailData);
+
+        if (null === $bodyHTML && null === $bodyText) {
+			// Do not send if no email was prepared
+			return;
+		}
+
         $newMail = new Email();
         $newMail->html($bodyHTML)
             ->text($bodyText)
