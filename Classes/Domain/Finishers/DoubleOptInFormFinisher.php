@@ -174,7 +174,14 @@ class DoubleOptInFormFinisher extends \TYPO3\CMS\Form\Domain\Finishers\EmailFini
         }
         $mail = $this->initializeFluidEmail($formRuntime)
             ->format($addHtmlPart ? FluidEmail::FORMAT_BOTH : FluidEmail::FORMAT_PLAIN)
-            ->assign('title', $subject);
+            ->assign('title', $subject)
+            ->to(...$recipients);
+
+        $from = $this->options['senderAddress'] ?? $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? null;
+		if (null !== $from) {
+			$mail->from($from);
+            $mail->getBody(); // Render all E-Mail types. Only possible with FROM set, because mail need to be valid.
+		}
 
         $bodyHTML = $mail->getHtmlBody(true);
         $bodyText = $mail->getTextBody(true);
